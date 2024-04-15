@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color:  #E5E5E5; /* Light grey background */
+  color: rgb(85, 84, 84);
+  height: 10vh;
+  justify-content: center;
+  align-items: center;
+
+}
+.form-group {
+  margin-bottom: 1em;
+}
+.screen {
+  text-align: center;
+  padding-top: 50px;
+}
+.screen1 {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white; /* White background for the form area */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  padding: 50px;
+  margin: auto; /* Center the screen vertically and horizontally */
+  width: 90%; /* Responsive width */
+  max-width: 600px; /* Maximum width */
+}
+
+select {
+  width: 100%; /* Full width within .form-group */
+  padding: 10px;
+  margin-top: 5px; /* Space after label */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+
+  background-color: #fd9893; /* Pink background */
+  color: white;
+  padding: 15px 20px;
+  margin: 15px 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #ff827c; 
+  transform: scale(1.05); 
+}
+
+.select-container {
+  padding: 10px;
+  margin: 10px;
+  /* Adjust the height and width as needed */
+  height: 150px; /* Changed height to 150px */
+  width: 300px; /* Changed width to 300px */
+}
+#header {
+  text-align: center;
+  /* Add additional styles as necessary */
+}
+
+#welcomeScreen h1 {
+  font-size: 100px;
+  color: rgb(85, 84, 84); /* Adjust the size as needed */
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+#welcomeScreen h2{
+  font-size: 35px;
+  color: rgb(85, 84, 84);
+  margin-top: 0px;
+}
+
+#logo {
+  max-width: 120px; /* Or the width you want */
+  height: auto; /* Maintain aspect ratio */
+  margin-top: 70px; /* Increase the top margin to push the logo down */
+  display: block; /* To ensure margins apply correctly */
+  margin-left: auto; /* These two margin auto settings will */
+  margin-right: auto; /* center the image if it has a defined width */
+  margin-bottom: 10px;
+
+}
