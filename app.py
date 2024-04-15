@@ -4,8 +4,8 @@ import tempfile
 import os
 import boto3
 
-aws_access_key = "AKIA6GBMAWWNPCSWWJVQ"
-aws_secret_key = "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"
+aws_access_key = "AWS ACCESS Key"
+aws_secret_key = "AWS Secret Key"
 bucket_name = "orahackscopilot"
 
 s3 = boto3.client(
