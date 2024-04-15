@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Page</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <div id="header">
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" id="logo" />
+    <!-- The rest of your content -->
+  </div>
+  <div id="welcomeScreen" class="screen">
+    <h1>Welcome!</h1>
+    <h2>Let's start learning.</h2>
+    <button onclick="goToSelection('student')">I am a Student</button>
+    <button onclick="goToSelection('educator')">I am an Educator</button>
+  </div>
+
+  <div id="selectionScreen" class="screen1" style="display: none;">
+    <h1 id="selectionHeading">Select Your Preferences</h1>
+    <div class="form-group">
+          <!-- Selection form here... -->
+    <label for="gradeLevel">Grade Level:</label>
+    <select id="gradeLevel">
+      <option value="">Select Grade</option>
+      <option value="9">9th</option>
+      <option value="12">12th</option>
+      <option value="College_Junior">College</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+          <label for="subject">Subject:</label>
+    <select id="subject">
+      <option value="">Select Subject</option>
+      <option value="Science">Science</option>
+      <option value="Social-science">Social Science</option>
+      <option value="English">English</option>
+    </select>
+    </div>
+
+    <div class="form-group">
+    <label for="difficultyLevel">Difficulty Level:</label>
+    <select id="difficultyLevel">
+      <option value="">Select Difficulty</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="Hard">Hard</option>
+    </select>
+    </div>
+
+
+    <button onclick="submitSelection()">Submit</button>
+    <button onclick="goBack()">Back</button> <!-- Back button added here -->
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

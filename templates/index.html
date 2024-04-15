@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation copilot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E5E5E5;
+            padding: 20px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #fd9893;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #fd9893;
+        }
+
+        #transcript,
+        #suggestion {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .output-label {
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div>
+        <label for="prompt">Prompt:</label>
+        <textarea id="prompt" rows="10" style="width: 100%;">I'm having a user interview, above is the interview script so far
+I'm building an app to help dental clinic to find talents & employees;
+                        
+You are a world-class UX researcher, based on information, give me 2 questions I should ask the user to dive further based on what they say; 
+                        
+be short, less than 150 words</textarea>
+    </div>
+    <button id="recordButton">Start Recording</button>
+    <button id="summaryButton">Ask TutorAI</button>
+    <div id="transcript"></div>
+    <div>TutorAI: <div id="suggestion"></div>
+    </div>
+    <button id="backButton" onclick="goBack()">Back</button>
+
+
+    <script>
+        const recordButton = document.getElementById('recordButton');
+        const transcriptDiv = document.getElementById('transcript');
+        const summaryButton = document.getElementById('summaryButton');
+
+        // Added From the user input:
+
+        let global_data = {
+            grade: "",
+            subject: "",
+            difficulty: ""
+        }
+
+        global_data = JSON.parse(localStorage.getItem("global_data_json"))
+
+        console.log("global_data = " + global_data);
+        console.log("global_data = " + localStorage.getItem("global_data_json"));
+
+        let prompt_string = `
+        I'm testing a teacher on their ability to answer questions, above is the conversation so far.
+        The class grade level is ${global_data.grade}, and the class subject is ${global_data.subject} 
+        You are a simulation of a classroom. Based on this information, give me 2 questions from students to dive further based on what they say.
+        The difficulty of each question should be ${global_data.difficulty}
+        Be short, less than 150 words
+        `
+
+        document.getElementById('prompt').value = prompt_string
+
+        let isRecording = false;
+        let mediaRecorder;
+        let intervalId;
+        let full_transcript = '';
+
+        // Set up WebSocket event listeners
+        summaryButton.addEventListener('click', async () => {
+            const promptText = document.getElementById('prompt').value;
+
+            const response = await fetch('/get-suggestion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transcript: full_transcript, prompt: promptText })
+            });
+
+            const data = await response.json();
+            console.log(data);
+            document.getElementById('suggestion').textContent = data.suggestion;
+        });
+
+        recordButton.addEventListener('click', () => {
+            if (!isRecording) {
+                startRecording();
+                recordButton.textContent = 'Stop Recording';
+            } else {
+                stopRecording();
+                recordButton.textContent = 'Start Recording';
+            }
+            isRecording = !isRecording;
+        });
+
+        async function startRecording() {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+            function createRecorder() {
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.addEventListener('dataavailable', async event => {
+                    console.log('Data available');
+                    const audioBlob = event.data;
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob);
+
+                    const response = await fetch('/process-audio', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (data.transcript != null) {
+                        full_transcript += data.transcript;
+                        transcriptDiv.textContent = full_transcript;
+                    }
+                    console.log(data.transcript)
+                });
+
+                mediaRecorder.start();
+            }
+
+            createRecorder(); // Start recording initially
+
+            // Set interval to stop current recorder and start a new one every 5 seconds
+            intervalId = setInterval(() => {
+                mediaRecorder.stop();
+                createRecorder();
+            }, 5000)
+        }
+
+
+        function stopRecording() {
+            clearInterval(intervalId); // Stop the interval
+            mediaRecorder.stop();
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+
+    </script>
+</body>
+
+</html>
